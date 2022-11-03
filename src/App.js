@@ -1,13 +1,13 @@
-import './App.css';
+import './App.module.css';
 import { useState } from "react";
-import { Navbar, Container, Nav, Row, Col } from 'react-bootstrap';
+import { Navbar, Container, Nav, Row, Col, Button, Stack} from 'react-bootstrap';
 import shoeData from './data';
 import { Routes, Route, useNavigate, Outlet } from "react-router-dom";
 import Detail from './routes/Detail'
 
 function App() {
 
-  let [shoes] = useState(shoeData)
+  let [shoes, setShoes] = useState(shoeData)
   let navigate = useNavigate();
 
   return (
@@ -26,20 +26,31 @@ function App() {
         </Container>
       </Navbar>
 
-      {/* <Link to="/">홈</Link>
-      <Link to="/detail">상세페이지</Link> */}
-
       <Routes>
         <Route path="/" element={
           <>
             <div className="main-bg"></div>
             <Container>
               <Row>
+                <Stack direction="horizontal" gap={3}>
+                  <div className="bg-light border ms-auto">
+                    <Button variant="dark" onClick={() => {
+                      let copyShoeData = [...shoes]
+                      copyShoeData.sort((a, b) => {
+                        if(a.title < b.title) return -1;
+                        if(a.title > b.title) return 1;
+                        else return 0;
+                      })
+                      setShoes(copyShoeData);
+                    }}>이름순</Button>
+                  </div>
+                </Stack>
+              </Row>
+              <Row>
                 {
-                  shoes.map((item, index) => {
-                    let imageUrl = "https://codingapple1.github.io/shop/shoes" + (index + 1) + ".jpg"
+                  shoes.map((item) => {
                     return (
-                      <Shoes imageUrl={imageUrl} item={item}></Shoes>
+                      <Shoes item={item} key={item.id}></Shoes>
                     )
                   })
                 }
@@ -47,7 +58,7 @@ function App() {
             </Container>
           </>
         } />
-        <Route path="/detail" element={<Detail></Detail>} />
+        <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
         <Route path="/*" element={<div>Error Page</div>}></Route>
 
         {/* Nested Routes
@@ -70,7 +81,7 @@ function App() {
 const Shoes = (props) => {
   return ( 
     <Col md="4">
-      <img src={props.imageUrl} width="80%" alt="shoeImage"/>
+      <img src={props.item.image} width="80%" alt="shoeImage"/>
       <h4>{props.item.title}</h4>
       <p>{props.item.content}</p>
       <p>{props.item.price}</p>
