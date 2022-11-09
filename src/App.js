@@ -1,4 +1,4 @@
-import './App.module.css';
+import './App.css';
 import { useState } from "react";
 import { Navbar, Container, Nav, Row, Col, Button, Stack} from 'react-bootstrap';
 import shoeData from './data';
@@ -25,11 +25,11 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
+        <div className="main-bg"></div>
 
       <Routes>
         <Route path="/" element={
           <>
-            <div className="main-bg"></div>
             <Container>
               <Row>
                 <Stack direction="horizontal" gap={3}>

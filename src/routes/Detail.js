@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -14,12 +15,37 @@ let YellowButton = styled.button`
 let NewButton = styled.button(YellowButton)
 
 const Detail = (props) => {
+    /* useEffect 쓰는 이유
+     * html 렌더링 후에 동작함.
+     * 어려운 연산
+     * 서버에서 데이터를 가져오는 작업
+     * 타이머 장착
+    */
+    let [alert, setAlert] = useState(true)
+    useEffect(() => {
+        let timer = setTimeout(()=>{ setAlert(false) }, 2000)
+        return () => {
+            // useEffect 동작 전 실행되는 곳
+            // ex: timer example
+            // Clean up Function
+            // mount시 실행 안됨. unmount 시에는 실행 됨
+            clearTimeout(timer)
+        }
+    }, [])
+
     // 유저가 URL Parameter에 입력한 것을 가져오려면 사용
     let { id } = useParams();
     let shoeItemByNo = props.shoes.find(item => item.id === Number(id))
     return (
         !isNaN(id) ? 
         <div className="container">
+            {
+                alert === true
+                ? <div className="alert alert-warning">
+                    2초이내 구매시 할인
+                </div>
+                : null
+            }
             <div className="row">
                 <div className="col-md-6">
                     <img src={shoeItemByNo.image} width="100%" alt="detail..."/>
