@@ -4,6 +4,8 @@ import { Navbar, Container, Nav, Row, Col, Button, Stack} from 'react-bootstrap'
 import shoeData from './data';
 import { Routes, Route, useNavigate, Outlet } from "react-router-dom";
 import Detail from './routes/Detail'
+import axios from 'axios'
+import Cart from './routes/Cart'
 
 function App() {
 
@@ -25,7 +27,6 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-        <div className="main-bg"></div>
 
       <Routes>
         <Route path="/" element={
@@ -46,6 +47,7 @@ function App() {
                   </div>
                 </Stack>
               </Row>
+              <div className="main-bg"></div>
               <Row>
                 {
                   shoes.map((item) => {
@@ -55,10 +57,20 @@ function App() {
                   })
                 }
               </Row>
+              <button onClick={()=>{
+                axios.get('https://codingapple1.github.io/shop/data2.json').then((결과)=>{
+                  let copy = [...shoes, ...결과.data]
+                  setShoes(copy)
+                })
+                .catch(()=>{
+                  console.log('실패함')
+                })
+              }}>버튼</button>
             </Container>
           </>
         } />
         <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
+        <Route path="/cart" element={<Cart />}></Route>
         <Route path="/*" element={<div>Error Page</div>}></Route>
 
         {/* Nested Routes
